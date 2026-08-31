@@ -60,3 +60,22 @@ Wrangler가 출력한 localhost 주소를 브라우저에서 엽니다.
 - USDT/KRW는 Upbit KRW-USDT 사용
 - `source=investing` 선택 시 핵심 3개 FX는 Investing 우선 + fallback
 - `npm run dev`와 `npm run dev:cloudflare` 둘 다 로컬 실행 가능
+
+## v16.8.5 Cloud routing hard-fix
+
+- `assets.run_worker_first: true`
+  - Cloudflare에서 `/api/*`가 SPA의 `index.html`로 먹히는 상황을 구조적으로 차단
+  - 모든 요청이 Worker를 먼저 거치고, 일반 화면/이미지만 `env.ASSETS.fetch()`로 전달
+- `/api/health` 추가
+  - 정상 배포 확인 URL: `https://배포주소/api/health`
+  - 반드시 JSON으로 `"version":"16.8.5"`가 보여야 함
+- API 예외도 HTML 대신 JSON 500으로 반환
+- 프론트에서도 API가 HTML을 반환하면 원인을 읽을 수 있게 오류 메시지 강화
+
+### 배포 후 가장 먼저 확인
+브라우저 주소창에 `/api/health`를 붙여 접속하세요.
+
+정상:
+`{"success":true,"version":"16.8.5","runtime":"cloudflare-worker",...}`
+
+HTML 화면이 뜬다면 v16.8.5 Worker가 아닌 다른 Pages/이전 URL을 보고 있는 것입니다.
