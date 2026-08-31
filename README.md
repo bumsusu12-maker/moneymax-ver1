@@ -69,3 +69,12 @@
 - `/api/*`만 Worker 우선 실행
 - 메인 화면/로고 등은 `public/` Static Assets로 배포
 - v16.8.1 보조지표 체크 수정 및 로고 백덤블링 유지
+
+
+## v16.8.4 market indicator fix
+- Cloudflare `/api/markets` 응답에 USD/KRW, JPY/KRW, USDT/KRW 복구
+- TradingView 1회 스캔 + Yahoo fallback
+- JPY/KRW 직접 값이 없으면 USD/KRW ÷ USD/JPY × 100으로 계산
+- USDT/KRW는 Upbit KRW-USDT 사용
+- `source=investing` 선택 시 핵심 3개 FX는 Investing 우선 + fallback
+- `npm run dev`와 `npm run dev:cloudflare` 둘 다 로컬 실행 가능
