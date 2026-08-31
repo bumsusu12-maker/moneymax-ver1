@@ -61,3 +61,11 @@
 - 프로필에서 복원된 보조지표 설정도 상단 카드에 반영
 - `/api/rates` 정상 갱신 때 MONEYMAX 로고가 한 바퀴 백덤블링
 - 기존 Cloudflare Pages 구조 및 TOP10 성능 수정 유지
+
+
+## v16.8.2 Cloudflare Workers
+- Pages Functions 방식 대신 Workers + Static Assets 방식으로 전환
+- `npx wrangler deploy` 직접 배포 가능
+- `/api/*`만 Worker 우선 실행
+- 메인 화면/로고 등은 `public/` Static Assets로 배포
+- v16.8.1 보조지표 체크 수정 및 로고 백덤블링 유지
