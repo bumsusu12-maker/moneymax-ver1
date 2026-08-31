@@ -1,0 +1,12 @@
+{
+  "name": "moneymax-cloudflare-pages",
+  "version": "16.8.0",
+  "private": true,
+  "scripts": {
+    "dev:cloudflare": "wrangler pages dev .",
+    "check": "node --check functions/api/rates.js && node --check functions/api/markets.js"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}
