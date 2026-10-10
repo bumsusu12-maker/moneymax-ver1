@@ -1800,7 +1800,10 @@ const fmt = n => n == null || Number.isNaN(Number(n)) ? "-" : Number(n).toLocale
 const clean = n => String(n).replace("머니박스 ","");
 function flagUrl(cur){ return `https://flagcdn.com/w80/${names[cur]?.[0] || "un"}.png`; }
 function allBranches(){
-  const branches=[...new Set(rows.map(r=>r.branch))];
+  const branches=[...new Set([
+    ...rows.map(r=>r.branch),
+    ...latestBranchStatus.map(s=>s?.name).filter(Boolean)
+  ])];
   return branches.sort((a,b)=>{
     const ai=BRANCH_PRIORITY.indexOf(a), bi=BRANCH_PRIORITY.indexOf(b);
     if(ai!==-1||bi!==-1){if(ai===-1)return 1;if(bi===-1)return -1;return ai-bi;}
@@ -1836,9 +1839,10 @@ function renderBranchList(){
     const checked = !selectedBranches.has("__NONE__") && (selectedBranches.size === 0 || selectedBranches.has(branch));
     const fav = favoriteBranches.has(branch);
     const type = rows.find(r=>r.branch===branch)?.type;
+    const hasRateRows = rows.some(r=>r.branch===branch);
     return `<label class="branch-item ${checked ? 'on':''}">
       <input type="checkbox" value="${branch}" ${checked ? 'checked':''} onchange="onBranchToggle()">
-      <span>${clean(branch)}${type === "external" ? '<span class="external-tag">외부</span>' : ''}</span>
+      <span>${clean(branch)}${type === "external" ? '<span class="external-tag">외부</span>' : ''}${!hasRateRows ? '<span class="external-tag" title="현재 환율 데이터 없음">데이터 없음</span>' : ''}</span>
       <span class="star ${fav ? 'on':''}" onclick="toggleFavorite(event,'${branch}')">★</span>
     </label>`;
   }).join("");
@@ -2890,7 +2894,7 @@ function wireBranchModalV158(){
 }
 
 function branchRegionV1595(name){
-  const seoul = ["명동","남대문","명동2","제일환전","강남","강남신사","광장시장","동대문","마포","서울역","성수","여의도","연남","용산","이태원","인사동","충무로","홍대","안국"];
+  const seoul = ["명동","남대문","명동2","제일환전","강남","잠실역","강남신사","광장시장","동대문","마포","서울역","성수","여의도","연남","용산","이태원","인사동","충무로","홍대","안국"];
   const metro = ["부평","송도","수원","안양","평택","인천","일산","분당"];
   if(seoul.includes(name)) return "서울";
   if(metro.includes(name)) return "경기·인천";
